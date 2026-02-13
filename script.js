@@ -1,66 +1,93 @@
-let products = ["test1", "test2", "test3"];
+let products = [
+  { name: "Statuetka Smok", price: 49 },
+  { name: "Figurka Robot", price: 39 },
+  { name: "Organizer na biurko", price: 29 }
+];
 
-function login() {
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
+let cart = [];
 
-  if(user === "admin" && pass === "1234") {
-    document.getElementById("loginSection").classList.add("hidden");
-    document.getElementById("homeSection").classList.remove("hidden");
-  } else {
-    alert("Błędne dane logowania");
-  }
-}
-
-function logout() {
-  document.getElementById("loginSection").classList.remove("hidden");
-  document.getElementById("homeSection").classList.add("hidden");
-  document.getElementById("productsSection").classList.add("hidden");
-}
-
-function showHome() {
+function showHome(){
+  hideAll();
   document.getElementById("homeSection").classList.remove("hidden");
-  document.getElementById("productsSection").classList.add("hidden");
 }
 
-function showProducts() {
-  document.getElementById("homeSection").classList.add("hidden");
+function showProducts(){
+  hideAll();
   document.getElementById("productsSection").classList.remove("hidden");
   renderProducts();
 }
 
-function renderProducts() {
+function showCart(){
+  hideAll();
+  document.getElementById("cartSection").classList.remove("hidden");
+  renderCart();
+}
+
+function hideAll(){
+  document.querySelectorAll(".section").forEach(sec => sec.classList.add("hidden"));
+}
+
+function renderProducts(){
   const list = document.getElementById("productList");
   list.innerHTML = "";
 
-  products.forEach(product => {
+  products.forEach((p, index)=>{
     const div = document.createElement("div");
     div.className = "product";
-    div.textContent = product;
+    div.innerHTML = `
+      <h3>${p.name}</h3>
+      <p>${p.price} zł</p>
+      <button onclick="addToCart(${index})">Dodaj do koszyka</button>
+    `;
     list.appendChild(div);
   });
 }
 
-function addProduct() {
-  const newProduct = document.getElementById("newProductName").value;
-  if(newProduct !== "") {
-    products.push(newProduct);
-    document.getElementById("newProductName").value = "";
+function addProduct(){
+  const name = document.getElementById("newName").value;
+  const price = document.getElementById("newPrice").value;
+
+  if(name && price){
+    products.push({name, price: Number(price)});
     renderProducts();
   }
 }
 
-function searchProduct() {
+function searchProduct(){
   const search = document.getElementById("searchInput").value.toLowerCase();
   const list = document.getElementById("productList");
   list.innerHTML = "";
 
-  products
-    .filter(p => p.toLowerCase().includes(search))
-    .forEach(product => {
-      const div = document.createElement("div");
-      div.className = "product";
-      div.textContent = product;
-      list.appendChild(div);
-    });
+  products.filter(p => p.name.toLowerCase().includes(search))
+  .forEach((p, index)=>{
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <h3>${p.name}</h3>
+      <p>${p.price} zł</p>
+      <button onclick="addToCart(${index})">Dodaj do koszyka</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function addToCart(index){
+  cart.push(products[index]);
+  document.getElementById("cartCount").textContent = cart.length;
+}
+
+function renderCart(){
+  const list = document.getElementById("cartList");
+  list.innerHTML = "";
+  let total = 0;
+
+  cart.forEach(p=>{
+    total += p.price;
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `${p.name} - ${p.price} zł`;
+    list.appendChild(div);
+  });
+
+  document.getElementById("totalPrice").textContent = "Suma: " + total + " zł";
 }
