@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mój Sklep</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Mój Sklep</h1>
+  <nav>
+    <button onclick="showHome()">Strona Główna</button>
+    <button onclick="showProducts()">Produkty</button>
+    <button onclick="logout()">Wyloguj</button>
+  </nav>
+</header>
+
+<section id="loginSection" class="center">
+  <h2>Logowanie</h2>
+  <input type="text" id="username" placeholder="Login">
+  <input type="password" id="password" placeholder="Hasło">
+  <button onclick="login()">Zaloguj</button>
+</section>
+
+<section id="homeSection" class="hidden center">
+  <h2>Witaj w moim sklepie!</h2>
+  <p>To jest darmowy prototyp sklepu.</p>
+</section>
+
+<section id="productsSection" class="hidden">
+  <h2>Produkty</h2>
+
+  <input type="text" id="searchInput" placeholder="Szukaj produktu..." onkeyup="searchProduct()">
+
+  <div id="productList"></div>
+
+  <h3>Dodaj produkt</h3>
+  <input type="text" id="newProductName" placeholder="Nazwa produktu">
+  <button onclick="addProduct()">Dodaj</button>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
